@@ -1,0 +1,31 @@
+- hosts: localhost
+  connection: local
+
+  vars:
+    temporary_directory: ~/ansible_temporary
+    google_chrome_file_name: google-chrome-stable_current_amd64.deb
+
+  tasks:
+    - name:
+      set_fact:
+        google_chrome_download_location: "{{temporary_directory}}/{{google_chrome_file_name}}"
+
+    - name: Create temporary directory
+      file:
+        path: "{{temporary_directory}}"
+        state: directory
+        mode: 0755
+
+    - name: Download Google Chrome
+      get_url:
+        url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        dest: "{{google_chrome_download_location}}"
+    - name: Install Google Chrome
+      become: true
+      apt:
+        deb: "{{google_chrome_download_location}}"
+
+    - name: Delete temporary directory
+      file:
+        path: "{{temporary_directory}}"
+        state: absent
