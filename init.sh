@@ -18,9 +18,3 @@ sudo apt install git
 
 # Ansible Playbookリポジトリのクローン
 git clone git@github.com:sside/wsl-setup.git
-
-# Ansible hosts設定
-sudo tee -a /etc/ansible/hosts << 'EOF'
-[local]
-localhost
-EOF
