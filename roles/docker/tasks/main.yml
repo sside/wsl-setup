@@ -1,0 +1,55 @@
+---
+- name: Dockerのキーをaptに登録
+  become: true
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+
+- name: Dockerのレジストリをaptに追加
+  become: true
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+
+- name: Dockerインストール
+  become: true
+  apt:
+    update_cache: true
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+      - software-properties-common
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+
+- name: Docker Composeインストール
+  become: true
+  vars:
+    docker_compose_version: 2.1.0
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+    dest: /usr/local/bin/docker-compose
+    mode: +x
+
+- name: カレントユーザをdockerグループに追加
+  become: true
+  user:
+    name: "{{ ansible.env.USER }}"
+    groups:
+      - docker
+    append: true
+
+- name: dockerグループのユーザをsudolessで実行できるようグループ変更
+  become: true
+  file:
+    path: /var/run/docker.sock
+    group: docker
+
+
+- name: dockerデーモン起動
+  become: true
+  service:
+    name: docker
+    state: started
+    enabled: true
