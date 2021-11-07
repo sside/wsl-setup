@@ -1,4 +1,8 @@
-# Andible実行するまで
+# What is this？
+
+個人的な WSL での開発環境セットアップ用 Ansible playbook。
+
+# Andible 実行するまで
 
 ```shell
 # sudoers追加
