@@ -23,33 +23,47 @@
       - docker-ce-cli
       - containerd.io
 
-- name: Docker Composeインストール
-  become: true
+- name: Docker CLI Pluginディレクトリ作成
+  file:
+    path: ~/.docker/cli-plugins
+    state: directory
+    mode: 0755
+
+- name: Docker Composeダウンロード先設定
+  set_fact:
+    compose_download_directory: "{{ temporary_directory }}/docker-compose"
+
+- name: Docker Composeダウンロード
   vars:
-    docker_compose_version: 2.1.0
+    docker_compose_version: 2.1.1
   get_url:
-    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
-    dest: /usr/local/bin/docker-compose
+    url: "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-linux-x86_64"
+    dest: ~/.docker/cli-plugins/docker-compose
     mode: +x
+
+# - name: Docker Composeインストール
+#   command: "mv {{ compose_download_directory }}/docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose"
 
 - name: カレントユーザをdockerグループに追加
   become: true
   user:
-    name: "{{ ansible.env.USER }}"
+    name: "{{ ansible_env.USER }}"
     groups:
       - docker
     append: true
+
+- name: dockerデーモン起動
+  become: true
+  shell: service docker restart
+
+- name: bashrcにdockerデーモン起動を追加
+  lineinfile:
+    path: ~/.bashrc
+    regexp: sudo service docker start
+    line: sudo service docker start
 
 - name: dockerグループのユーザをsudolessで実行できるようグループ変更
   become: true
   file:
     path: /var/run/docker.sock
     group: docker
-
-
-- name: dockerデーモン起動
-  become: true
-  service:
-    name: docker
-    state: started
-    enabled: true
