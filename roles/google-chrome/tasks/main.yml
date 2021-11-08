@@ -1,14 +1,14 @@
 ---
 - name: ダウンロードパスを設定
   set_fact:
-    google_chrome_download_location: "{{temporary_directory}}/google-chrome-stable_current_amd64.deb"
+    google_chrome_download_location: "{{ temporary_directory }}/google-chrome-stable_current_amd64.deb"
 
 - name: Google Chromeダウンロード
   get_url:
     url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    dest: "{{google_chrome_download_location}}"
+    dest: "{{ google_chrome_download_location }}"
 
 - name: Google Chromeインストール
   become: true
   apt:
-    deb: "{{google_chrome_download_location}}"
+    deb: "{{ google_chrome_download_location }}"
