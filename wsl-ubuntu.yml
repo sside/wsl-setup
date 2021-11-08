@@ -6,7 +6,7 @@
   pre_tasks:
     - name: テンポラリディレクトリ作成
       ansible.builtin.file:
-        path: "{{temporary_directory}}"
+        path: "{{ temporary_directory }}"
         state: directory
         mode: 0755
 
@@ -18,5 +18,5 @@
   post_tasks:
     - name: テンポラリディレクトリを削除
       ansible.builtin.file:
-        path: "{{temporary_directory}}"
+        path: "{{ temporary_directory }}"
         state: absent
