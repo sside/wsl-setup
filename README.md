@@ -17,3 +17,20 @@ sudo apt install --yes ansible software-properties-common git
 # Ansible Playbookリポジトリのクローン
 git clone git@github.com:sside/wsl-setup.git
 ```
+
+# Ansible 実行
+
+```shell
+ansible-playbook wsl-ubuntu.yml --ask-become-pass
+```
+
+# DPI Scaling を有効にする(2021-11-19時点)
+
+`C:\ProgramData\Microsoft\WSL`に
+
+```
+[system-distro-env]
+WESTON_RDP_DISABLE_FRACTIONAL_HI_DPI_SCALING=false
+```
+
+を追記。
