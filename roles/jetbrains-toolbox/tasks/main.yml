@@ -1,0 +1,29 @@
+---
+- name: JetBrains Toolboxダウンロードパスを設定
+  set_fact:
+    download_directory: "{{ temporary_directory }}/jetbrains-toolbox"
+
+- name: JetBrains Toolboxバージョン指定
+  set_fact:
+    toolbox_version: 1.20.7940
+
+- name: JetBrains Toolbox保存先フルパス設定
+  set_fact:
+    download_path: "{{ download_directory }}/jetbrains-toolbox-{{ toolbox_version }}.tar.gz"
+
+- name: JetBrains Toolboxダウンロード
+  get_url:
+    url: https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{ toolbox_version }}.tar.gz
+    dest: "{{ download_path: }}"
+
+- name: JetBrains Toolbox解凍
+  become: true
+  unarchive:
+    src: "{{ download_path }}"
+    dest: /opt/jetbrains-toolbox
+
+- name: JetBrains Toolboxシンボリックリンク作成
+  file:
+    src: /opt/jetbrains-toolbox/jetbrains-toolbox
+    dest: /usr/local/bin/jetbrains-toolbox
+    state: link
