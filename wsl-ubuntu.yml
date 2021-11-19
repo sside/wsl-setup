@@ -14,6 +14,7 @@
     - role: fonts
     - role: google-chrome
     - role: docker
+    - role: jetbrains-toolbox
 
   post_tasks:
     - name: テンポラリディレクトリを削除
