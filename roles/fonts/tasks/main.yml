@@ -3,4 +3,6 @@
   become: true
   apt:
     update_cache: true
-    name: fonts-cascadia-code
+    name:
+      - fonts-cascadia-code
+      - fonts-noto-cjk
