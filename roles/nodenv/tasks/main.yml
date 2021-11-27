@@ -1,0 +1,56 @@
+---
+- name: nodenv root設定
+  set_fact:
+    nodenv_root: ~/.nodenv
+
+# - name: nodenv インストールディレクトリ作成
+#   file:
+#     path: "{{ nodenv_root }}/lib/node_modules/npm"
+#     state: directory
+#     mode: 0755
+
+- name: clone nodenv
+  git:
+    repo: https://github.com/nodenv/nodenv.git
+    dest: "{{ nodenv_root }}"
+
+- name: node-build インストール
+  git:
+    repo: https://github.com/nodenv/node-build.git
+    dest: "{{ nodenv_root }}/plugins/node-build"
+
+- name: nodenv-default-packagesインストール
+  git:
+    repo: https://github.com/nodenv/nodenv-default-packages.git
+    dest: "{{ nodenv_root }}/plugins/nodenv-default-packages"
+
+- name: default-packages ファイル作成
+  file:
+    path: "{{ nodenv_root }}/default-packages"
+    state: touch
+    mode: 0755
+
+- name: nodenv-default-packages パッケージ追加
+  lineinfile:
+    path: "{{ nodenv_root }}/default-packages"
+    line: "{{ item }}"
+  with_items:
+    - yarn
+
+- name: nodenv update インストール
+  git:
+    repo: https://github.com/nodenv/nodenv-update.git
+    dest: "{{ nodenv_root }}/plugins/nodenv-update"
+
+- name: jetbrains-npm インストール
+  git:
+    repo: https://github.com/nodenv/jetbrains-npm
+    dest: "{{ nodenv_root }}/lib/node_modules/npm"
+
+- name: nodenvにPATHを通す
+  lineinfile:
+    path: ~/.bashrc
+    line: "{{ item }}"
+  with_items:
+    - export PATH="$HOME/.nodenv/bin:$PATH;"
+    - eval "$(nodenv init -)"
