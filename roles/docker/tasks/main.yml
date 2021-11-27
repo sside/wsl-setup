@@ -52,9 +52,9 @@
       - docker
     append: true
 
-- name: dockerデーモン起動
+- name: docker起動
   become: true
-  shell: service docker restart
+  shell: service docker start
 
 - name: bashrcにdockerデーモン起動を追加
   lineinfile:
