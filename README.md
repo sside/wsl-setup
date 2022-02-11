@@ -2,7 +2,7 @@
 
 個人的な WSL での開発環境セットアップ用 Ansible playbook。
 
-# Andible 実行するまで
+# Ansible 実行するまで
 
 ```shell
 # sudoers追加
