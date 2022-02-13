@@ -1,0 +1,6 @@
+---
+- name: wsl.confを登録
+  become: true
+  copy:
+    src: wsl.conf
+    dest: /etc/wsl.conf

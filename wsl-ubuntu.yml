@@ -11,6 +11,7 @@
         mode: 0755
 
   roles:
+    - role: wsl
     - role: fonts
     - role: google-chrome
     - role: docker
